@@ -1,7 +1,14 @@
 import java.lang.Math;
 
+class A{
+    static class X{}
+}
+
+class B{}
+
+
 public class Ponto {
-    public int x, y, z;
+    public int w, x, y, z;
 
     public Ponto(int x, int y)
     {
