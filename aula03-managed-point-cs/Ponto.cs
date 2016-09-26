@@ -19,7 +19,7 @@ public class Ponto {
     }
 
     public double getModule() {
-        return Math.Sqrt((double)x*x + y*y);
+        return Math.Sqrt(x*x + y*y);
     }
 
     public void print(){
