@@ -1,0 +1,65 @@
+1.	Dado: class A{} considere as seguintes declarações e inicializações: 
+       A a1 = new A(); A a2 = new A(); 
+    Indique qual ou quais das expressões booleanas seguintes tem o resultado false:
+    
+    Resposta: Nenhuma. 
+    typeof(A), a1.GetType(), a2.GetType(), retornam a mesma referencia para o mesmo objecto.
+
+
+2.	Dada: struct A {int x; public A(int nr) {this.x = nr; }} qual o resultado da 
+    compilação do operador new na instrução: A a = new A(3);
+
+    Resposta: call     A::.ctor(int32)
+
+3.	Quantos ficheiros .class resultam da compilação de um ficheiro App.Java que 
+    contém a seguinte definição: public class App{ class B{}} class C{}
+    
+    Resposta: três ficheiros  .class
+
+4.	Que ficheiros resultam da compilação de um ficheiro App.cs que contém a seguinte definição: 
+    public class App{ class B{}} class C{}  
+
+    Resposta: um ficheiro .dll
+
+
+5.	Dado tipo .net Dummy e uma variável target do tipo Object, indique qual das 
+    expressões booleanas dá um erro de compilação.
+    
+    Resposta: o is typeof(Dummy)
+
+    
+6. Implemente o método estático: Caller CallOneMe(Type klass), que retorna uma nova
+instância da classe Caller cujo o método Call() chama todos os métodos (instância
+ou estáticos) da classe klass, que retornem void e recebam um único parâmetro do
+tipo long. 
+A esse parâmetro é passado como argumento o número de ticks actual (valor dado por
+DateTime.Now.Ticks).
+Admita que o tipo representado pelo argumento klass tem um construtor sem parâmetros.
+No exemplo seguinte M3 nunca é chamado por não ter uma assinatura compatível com
+os requisitos enunciados.
+
+/*------------------- "" --------------------------*/
+class Handlers {
+  public static void M1(long dur) { Console.Write("M1-" + dur + " ");  }
+  [DueAfter(200000)]
+  public void M2(long nr) { Console.Write("M2-" + nr + " "); }
+  void M3(long diff, string label) { Console.Write(label + ": " + diff); }
+  void M4(long count) { Console.Write("M3-" + count + " "); }
+}	
+
+/*------------------- "" --------------------------*/
+
+Caller caller = CallOneMe(typeof(Handlers));
+caller.Call(); // M1-3002 M2-3002 M4-3002
+Thread.Sleep(new TimeSpan(200000));
+caller.Call(); // M1-240014 M4-240014
+caller.Call(); // M1-240017 M4-240017
+
+/*------------------- "" --------------------------*/
+
+Se um método estiver anotado com o atributo DueAfter, então esse método só será
+chamado enquanto o número de ticks decorridos entre a chamada a CallOnMe() e o
+Call() for menor que o valor especificado em DueAfter.
+Implemente o método estático CallOneMe(Type klass), a classe Caller e o atributo
+DueAfter.
+
