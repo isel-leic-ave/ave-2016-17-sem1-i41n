@@ -59,12 +59,12 @@ static class App
         return new EnumerableConverter<T, R>(src, transf);
     }  
  
-    static IEnumerable Filter<T>(IEnumerable src, Predicate<T> p) {
+    static IEnumerable<T> Filter<T>(IEnumerable<T> src, Predicate<T> p) {
         return new EnumerableFilter<T>(src, p);
     }  
 
-    static IEnumerable Distinct(IEnumerable src) {
-        return new EnumerableDistinct(src);
+    static IEnumerable<T> Distinct<T>(IEnumerable<T> src) {
+        return new EnumerableDistinct<T>(src);
     }  
     
     static void Print(string label) {
@@ -73,25 +73,24 @@ static class App
     static void Main()
     {
         IEnumerable names = 
-            Distinct(
-                
-                    Filter<Student>(
-                        Filter<Student>(
-                            Convert<object, Student>(
-                                Lines("i41n.txt"),
-                                Student.Parse), // Method Reference 
-                            s => ((Student) s).nr > 38000), 
-                        s => ((Student) s).name.StartsWith("A"))
-                    // s => ((Student) s).name.Split(' ')[0]
-                
+            Convert(
+                Filter(
+                    Filter(
+                        Convert(
+                            Lines("i41n.txt"),
+                            line => { Console.WriteLine("Converting"); return Student.Parse(line); }) ,
+                        s => { Console.WriteLine("Filtering"); return s.nr > 38000; }), 
+                    s => { Console.WriteLine("Filtering"); return s.name.StartsWith("A"); }),
+                s => { Console.WriteLine("Converting"); return s.name; }
             );
         
+        Console.ReadLine();
         foreach(object l in names)
-            Console.WriteLine(l);        
+            Console.WriteLine(l);
     }
 }
 
-class EnumerableConverter<T, R> : IEnumerable<R>{
+class EnumerableConverter<T, R> : IEnumerable<R>, IEnumerable{
     readonly IEnumerable<T> src;
     readonly Func<T, R> transf;
     public EnumerableConverter(IEnumerable<T> src, Func<T, R> transf) {
@@ -101,11 +100,11 @@ class EnumerableConverter<T, R> : IEnumerable<R>{
         return new EnumeratorConverter<T, R>(src.GetEnumerator(), transf);
     }
     IEnumerator IEnumerable.GetEnumerator() {
-        return new EnumeratorConverter<T, R>(src.GetEnumerator(), transf);
+        return this.GetEnumerator();
     }
 }
 
-class EnumeratorConverter<T, R> : IEnumerator<R>{ // implicito : IEnumerable
+class EnumeratorConverter<T, R> : IEnumerator<R> { // implicito : IEnumerator
     readonly IEnumerator<T> src;
     readonly Func<T, R> transf;
     public EnumeratorConverter(IEnumerator<T> src, Func<T, R> transf) {
@@ -131,22 +130,25 @@ class EnumeratorConverter<T, R> : IEnumerator<R>{ // implicito : IEnumerable
     public void Dispose() {}
 }
 
-class EnumerableFilter<T> : IEnumerable{
-    readonly IEnumerable src;
+class EnumerableFilter<T> : IEnumerable<T>{
+    readonly IEnumerable<T> src;
     readonly Predicate<T> p;
-    public EnumerableFilter(IEnumerable src, Predicate<T> p) {
+    public EnumerableFilter(IEnumerable<T> src, Predicate<T> p) {
         this.src = src; this.p = p;
     }
-    public IEnumerator GetEnumerator() {
+    public IEnumerator<T> GetEnumerator() {
         return new EnumeratorFilter<T>(src.GetEnumerator(), p);
+    }
+    IEnumerator IEnumerable.GetEnumerator() {
+        return this.GetEnumerator();
     }
 }
 
-class EnumeratorFilter<T> : IEnumerator{
-    readonly IEnumerator src;
+class EnumeratorFilter<T> : IEnumerator<T>{
+    readonly IEnumerator<T> src;
     readonly Predicate<T> p;
-    object curr;
-    public EnumeratorFilter(IEnumerator src, Predicate<T> p) {
+    T curr;
+    public EnumeratorFilter(IEnumerator<T> src, Predicate<T> p) {
         this.src = src; this.p = p;
     }
     
@@ -156,35 +158,44 @@ class EnumeratorFilter<T> : IEnumerator{
             if(p((T) curr))
                 return true;
             else
-                curr = null;
+                curr = default(T);
         }
         return false;
     }
     
-    public object Current {
+    public T Current {
+        get{ return curr; }
+    }
+    
+    object IEnumerator.Current {
         get{ return curr; }
     }
     
     public void Reset() { 
         src.Reset();
     }
+    public void Dispose() {}
 }
 
-class EnumerableDistinct : IEnumerable{
-    readonly IEnumerable src;
-    public EnumerableDistinct(IEnumerable src) {
+class EnumerableDistinct<T> : IEnumerable<T>{
+    readonly IEnumerable<T> src;
+    public EnumerableDistinct(IEnumerable<T> src) {
         this.src = src; 
     }
-    public IEnumerator GetEnumerator() {
-        return new EnumeratorDistinct(src.GetEnumerator());
+    public IEnumerator<T> GetEnumerator() {
+        return new EnumeratorDistinct<T>(src.GetEnumerator());
+    }
+    
+    IEnumerator IEnumerable.GetEnumerator() {
+        return this.GetEnumerator();
     }
 }
 
-class EnumeratorDistinct : IEnumerator{
-    readonly IEnumerator src;
+class EnumeratorDistinct<T> : IEnumerator<T>{
+    readonly IEnumerator<T> src;
     readonly IList selected = new ArrayList();
-    object curr;
-    public EnumeratorDistinct(IEnumerator src) {
+    T curr;
+    public EnumeratorDistinct(IEnumerator<T> src) {
         this.src = src; 
     }
     
@@ -199,12 +210,16 @@ class EnumeratorDistinct : IEnumerator{
         return false;
     }
     
-    public object Current {
+    public T Current {
         get{ return curr; }
     }
-    
+    object IEnumerator.Current {
+        get{ return curr; }
+    }
     public void Reset() { 
         src.Reset();
     }
+    
+    public void Dispose() {}
 }
 
