@@ -31,8 +31,9 @@ namespace MapperBenchmark
         }
 
         [MapperAttribute]
-        public static Company SchoolToCompany(School s)
+        public static object SchoolToCompany(object target)
         {
+            School s = (School)target;
             return new Company(s.Name);
         }
     }

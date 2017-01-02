@@ -64,16 +64,18 @@ namespace Mapper
 
         class MapperForMethod : IMapper
         {
-            private MethodInfo m;
+            private Func<object, object> handler;
 
             public MapperForMethod(MethodInfo m)
             {
-                this.m = m;
+                this.handler = (Func<object, object>) Delegate.CreateDelegate(
+                    typeof(Func<object, object>),
+                    m);
             }
 
             public object Map(object src)
             {
-                return m.Invoke(null, new object[] { src });
+                return handler(src);
             }
         }
     }
