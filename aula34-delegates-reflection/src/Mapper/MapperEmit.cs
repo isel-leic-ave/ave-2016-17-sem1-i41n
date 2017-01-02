@@ -1,6 +1,7 @@
 ﻿using Mapper.Mapping;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace Mapper
@@ -40,7 +41,21 @@ namespace Mapper
                 m.Copy(src, dest);
             }
             return dest;
+        }
+        public TDest[] Map(TSrc[] src) {
+            /*
+            // 1. Criar o array destino
+            TDest[] res = new TDest[src.Length];
 
+            // 2. copiar do array src para o array destino + transformção dos items
+            for (int i = 0; i < src.Length; i++)
+            {
+                res[i] = Map(src[i]);
+            }
+            // 3. retornar o array
+            return res;
+            */
+            return src.Select(item => Map(item)).ToArray();
         }
 
         public MapperEmit<TSrc, TDest> Match(string nameFrom, string nameDest)
