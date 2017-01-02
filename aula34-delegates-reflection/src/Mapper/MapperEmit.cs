@@ -11,6 +11,7 @@ namespace Mapper
         private readonly Type klassSrc;
         private readonly Type klassDest;
         private readonly Dictionary<String, IMapping> props; // key: dest Prop and Value: src Prop
+        private Dictionary<Type, IMapper> mappers;
 
         public MapperEmit()
         {
@@ -26,6 +27,11 @@ namespace Mapper
                     props.Add(p.Name, MappingPropsBuidler.CreateMappingProps(pSrc, p));
                 }
             }
+        }
+
+        public MapperEmit(Dictionary<Type, IMapper> mappers) : this()
+        {
+            this.mappers = mappers;
         }
 
         public object Map(object src)
@@ -66,7 +72,7 @@ namespace Mapper
                 props.Add(nameDest, MappingPropsBuidler.CreateMappingProps(pSrc, pDest));
             else if (!pSrc.PropertyType.IsPrimitive && !pDest.PropertyType.IsPrimitive)
             {
-                props.Add(nameDest, new MappingEntities(pSrc, pDest));
+                props.Add(nameDest, new MappingEntities(pSrc, pDest, mappers));
             }
             return this;
         }

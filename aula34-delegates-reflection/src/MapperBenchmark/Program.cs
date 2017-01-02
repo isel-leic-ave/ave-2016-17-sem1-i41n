@@ -1,6 +1,7 @@
 ﻿using Mapper;
 using MapperTest;
 using System;
+using System.Linq;
 
 namespace MapperBenchmark
 {
@@ -10,15 +11,29 @@ namespace MapperBenchmark
         {
            School isel = new School("Isel", "Lisboa");
            Student s = new Student { Nr = 27721, Name = "Ze Manel", School = isel };
+           Student[] a = Enumerable.Repeat(s, 1024).ToArray();  
 
-            MapperEmit<Student, Person> mapper = AutoMapperEmit
+           MapperEmit<Student, Person> mapper1 = AutoMapperEmit
                 .Build<Student, Person>()
                 .Match("Nr", "Id")
                 .Match("School", "Org");
 
-            NBench.Bench(() => mapper.Map(s), "Mapping complex properties");
-            Person p = mapper.Map(s);
-            Console.ReadLine();
+            MapperEmit<Student, Person> mapper2 = AutoMapperEmit
+                .Load("MapperBenchmark.exe")
+                .Build<Student, Person>()
+                .Match("Nr", "Id")
+                .Match("School", "Org");
+            NBench.Bench(() => mapper1.Map(a), "Mapping 1  array of Students");
+            NBench.Bench(() => mapper2.Map(a), "Mapping 2  array of Students");
+
+            NBench.Bench(() => mapper1.Map(a), "Mapping 1  array of Students");
+            NBench.Bench(() => mapper2.Map(a), "Mapping 2  array of Students");
+        }
+
+        [MapperAttribute]
+        public static Company SchoolToCompany(School s)
+        {
+            return new Company(s.Name);
         }
     }
 }

@@ -43,6 +43,7 @@
     <Compile Include="AutoMapperEmit.cs" />
     <Compile Include="IMapper.cs" />
     <Compile Include="IMapping.cs" />
+    <Compile Include="MapperAttribute.cs" />
     <Compile Include="MapperEmit.cs" />
     <Compile Include="Mapping\MappingConst.cs" />
     <Compile Include="Mapping\MappingEntities.cs" />

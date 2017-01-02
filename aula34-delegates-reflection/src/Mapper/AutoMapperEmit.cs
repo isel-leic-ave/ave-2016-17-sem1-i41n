@@ -20,6 +20,26 @@ namespace Mapper
                 .Invoke(null, null);
         }
 
+        public static AutoMapperBuilder Load(string path)
+        {
+            return new AutoMapperBuilder(path);
+        }
+
+        public class AutoMapperBuilder
+        {
+            private string path;
+
+            public AutoMapperBuilder(string path)
+            {
+                this.path = path;
+            }
+
+            public MapperEmit<TSrc, TDest> Build<TSrc, TDest>()
+            {
+                return new MapperEmit<TSrc, TDest>(LoadMappers(path));
+            }
+        }
+
         /// <returns>Dictionary<Type, IMapper>  Where key is the type of the Src and the value is a Mapper</returns>
         public static Dictionary<Type, IMapper> LoadMappers(string path) {
             Dictionary<Type, IMapper> res = new Dictionary<Type, IMapper>();

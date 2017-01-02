@@ -22,6 +22,31 @@ namespace MapperTest
             Assert.AreEqual(p.Name, s.Name);
             Assert.AreEqual(p.Org.Name, s.School.Name);
         }
+
+        [MapperAttribute]
+        public static Company SchoolToCompany(School s) {
+            return new Company(s.Name);
+        }
+
+        [TestMethod]
+        public void LoadAndMapStudentToSchoolTest()
+        {
+            MapperEmit<Student, Person> mapper = AutoMapperEmit
+                .Load("MapperTest.dll")
+                .Build<Student, Person>()
+                .Match("Nr", "Id")
+                .Match("School", "Org");
+
+            School isel = new School("Isel", "Lisboa");
+            Student s = new Student { Nr = 27721, Name = "Ze Manel", School = isel };
+
+            Person p = mapper.Map(s);
+            Assert.AreEqual(p.Id, s.Nr);
+            Assert.AreEqual(p.Name, s.Name);
+            Assert.AreEqual(p.Org.Name, s.School.Name);
+        }
+
+
         [TestMethod]
         public void MapSudentsArraysTest()
         {
