@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
+  <Class Name="Mapper.MapperEmit&lt;TSrc, TDest&gt;">
+    <Position X="0.5" Y="2.25" Width="2.75" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAQAgAAABAAAAAIEAAAAAAAAACIAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>MapperEmit.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Field Name="props" />
+    </ShowAsCollectionAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Mapper.Mapping.MappingConst" Collapsed="true">
+    <Position X="4.5" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAgAAACAAAAACAAAAAAA=</HashCode>
+      <FileName>Mapping\MappingConst.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Mapper.Mapping.MappingEntities" Collapsed="true">
+    <Position X="8.5" Y="4.25" Width="1.5" />
+    <AssociationLine Name="mapper" Type="Mapper.IMapper" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="10" Y="4.438" />
+        <Point X="10.375" Y="4.438" />
+        <Point X="10.375" Y="1.024" />
+        <Point X="3" Y="1.024" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAABAAAAAIAAAAAAAAAAAAAgAAAAAAAAACAAAAAAA=</HashCode>
+      <FileName>Mapping\MappingEntities.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="mapper" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Mapper.Mapping.MappingPropsBuidler" Collapsed="true">
+    <Position X="6.25" Y="4.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAAAgAAAABAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Mapping\MappingPropsBuidler.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mapper.AutoMapperEmit">
+    <Position X="0.5" Y="5.25" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAA=</HashCode>
+      <FileName>AutoMapperEmit.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="Mapper.IMapper">
+    <Position X="1" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>IMapper.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Mapper.IMapping">
+    <Position X="6.5" Y="2.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>IMapping.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Tahoma" Size="9.16" />
+</ClassDiagram>
